@@ -4,33 +4,60 @@ from copy import deepcopy
 import matplotlib.pyplot as plt
 from layers import *
 from augmenter import Augmenter
-import os 
+from optimizers import *
 import logging
 import logging.handlers
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+def build_logger(sender, pwd):
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
 
-formatter = logging.Formatter("%(asctime)s:%(levelname)s: %(message)s")
+    formatter = logging.Formatter("%(asctime)s:%(levelname)s: %(message)s")
 
-file_handler = logging.FileHandler("C:/Users/twich/OneDrive/Documentos/NeuralNets/cnn/training.log")
-smtpHandler = logging.handlers.SMTPHandler(
-   mailhost=("smtp.gmail.com",587),
-   fromaddr="twich.badass@gmail.com",
-   toaddrs="twich.badass@gmail.com",
-   subject="Training Alert",
-   credentials=("twich.badass@gmail.com", "tjmgyekrpmafqfrw"),
-   secure=()
-)
+    file_handler = logging.FileHandler("C:/Users/twich/OneDrive/Documentos/NeuralNets/cnn/training.log")
+    smtpHandler = logging.handlers.SMTPHandler(
+    mailhost=("smtp.gmail.com",587),
+    fromaddr=sender,
+    toaddrs=sender,
+    subject="Training Alert",
+    credentials=(sender, pwd),
+    secure=()
+    )
 
-file_handler.setLevel(logging.INFO)
-smtpHandler.setLevel(logging.WARNING)
+    file_handler.setLevel(logging.INFO)
+    smtpHandler.setLevel(logging.WARNING)
 
-file_handler.setFormatter(formatter)
-smtpHandler.setFormatter(formatter)
+    file_handler.setFormatter(formatter)
+    smtpHandler.setFormatter(formatter)
 
-logger.addHandler(smtpHandler)
-logger.addHandler(file_handler)
+    logger.addHandler(smtpHandler)
+    logger.addHandler(file_handler)
+    return logger
+
+def load_data():
+    #Load train data:
+    training_data = pd.read_csv('C:/Users/twich/OneDrive/Documentos/NeuralNets/data/mnist_train.csv', header=None,low_memory=False)
+    yl = training_data.iloc[1:,0].astype('float')
+    xl = training_data.iloc[1:,1:].astype('float')
+    #Load test data:
+    testing_data = pd.read_csv('C:/Users/twich/OneDrive/Documentos/NeuralNets/data/mnist_test.csv', header=None,low_memory=False)
+    yt = testing_data.iloc[1:,0].astype('float')
+    xt = testing_data.iloc[1:,1:].astype('float')
+
+    #Data Augmentation (shift horizontal & vertical):
+    augmenter = Augmenter()
+    xl, yl = augmenter.fit_transform(xl,yl,ratio=4)
+
+    xl = xl.to_numpy().astype('float')
+    yl = yl.to_numpy().astype('float')
+    xt = xt.to_numpy().astype('float')
+    yt = yt.to_numpy().astype('float')
+
+    #Normalization:
+    xl = (xl - xl.mean()) / (xl.std() + 1e-5)
+    xt = (xt - xt.mean()) / (xt.std() + 1e-5)
+
+    return xl, xt, yl, yt
 
 class Model():
     def __init__(self):
@@ -127,80 +154,68 @@ class Model():
             except:
                 logger.exception("\nAn exception has occured on epoch {}:".format(i))
 
-#TEST model with MNIST dataset from kaggle:
-logger.info("\nLoading data...")
-#Load train data:
-training_data = pd.read_csv('NeuralNets/data/mnist_train.csv', header=None,low_memory=False)
-yl = training_data.iloc[1:,0].astype('float')
-xl = training_data.iloc[1:,1:].astype('float')
-#Load test data:
-testing_data = pd.read_csv('NeuralNets/data/mnist_train.csv', header=None,low_memory=False)
-yt = testing_data.iloc[1:,0].astype('float')
-xt = testing_data.iloc[1:,1:].astype('float')
+def main():
+    global logger
+    logger = build_logger("twich.badass@gmail.com", "tjmgyekrpmafqfrw")
 
+    #TEST model with MNIST dataset from kaggle:
+    logger.info("\nLoading data...")
 
-augmenter = Augmenter()
-xl, yl = augmenter.fit_transform(xl,yl,ratio=4)
+    #Load MNIST data:
+    xl, xt, yl, yt = load_data()
 
+    #Build Model:
+    logger.info("\nBuilding model...")
+    model = Model()
+    model.add(Conv(input_shape = (1,28,28), num_kernels = 5, kernel_size = 5,padding=2))
+    model.add(BatchNorm())
+    model.add(Relu())
+    model.add(MaxPool((5,28,28)))
 
-xl = xl.to_numpy().astype('float')
-yl = yl.to_numpy().astype('float')
-xt = xt.to_numpy().astype('float')
-yt = yt.to_numpy().astype('float')
+    model.add(Conv(input_shape = (5,14,14), num_kernels = 5, kernel_size = 3,padding=1))
+    model.add(BatchNorm())
+    model.add(Relu())
+    model.add(MaxPool((5,14,14)))
 
-xl = (xl - xl.mean()) / (xl.std() + 1e-5)
-xt = (xt - xt.mean()) / (xt.std() + 1e-5)
+    model.add(Flatten((5,7,7),(245)))
 
-logger.info("\nBuilding model...")
-model = Model()
-model.add(Conv(input_shape = (1,28,28), num_kernels = 5, kernel_size = 5,padding=2))
-model.add(BatchNorm())
-model.add(Relu())
-model.add(MaxPool((5,28,28)))
+    model.add(Dense(245,256,optimizer=Adam))
+    model.add(BatchNorm())
+    model.add(Relu())
+    #model.add(Dropout(p=.8))
 
-model.add(Conv(input_shape = (5,14,14), num_kernels = 5, kernel_size = 3,padding=1))
-model.add(BatchNorm())
-model.add(Relu())
-model.add(MaxPool((5,14,14)))
+    model.add(Dense(256,256,optimizer=Adam))
+    model.add(BatchNorm())
+    model.add(Relu())
+    #model.add(Dropout(p=.8))
 
-model.add(Flatten((5,7,7),(245)))
+    model.add(Dense(256,256,optimizer=Adam))
+    model.add(BatchNorm())
+    model.add(Relu())
+    #model.add(Dropout(p=.8))
 
-model.add(Dense(245,256))
-model.add(BatchNorm())
-model.add(Relu())
-#model.add(Dropout(p=.8))
+    model.add(Dense(256,10,optimizer=Adam))
+    model.add(Softmax())
 
-model.add(Dense(256,256))
-model.add(BatchNorm())
-model.add(Relu())
-#model.add(Dropout(p=.8))
+    #Training Params:
+    epochs = 60
+    batch_size = 10
+    validation_size = .05
+    learning_rate = 2e-3
+    regularization = 2e-3
+    logger.info("\nTraining model...")
+    model.train(xl,yl, epochs = epochs, batch_size = batch_size, validation_size = validation_size, learning_rate = learning_rate, regularization = regularization) #BEST 5e-4
 
-model.add(Dense(256,256))
-model.add(BatchNorm())
-model.add(Relu())
-#model.add(Dropout(p=.8))
+    test_acc = model.evaluate(model.predict(xt),yt)
+    print(test_acc)
 
-model.add(Dense(256,10))
-model.add(Softmax())
+    logger.warning("\nTraining complete!\n\nHyperparameters:\nEpochs: {}\nBatch_size: {}\nValidation_size: {}\nlearning_rate: {}\nregularization: {}\n\nStatistics:\nBest Acc Val: {}\nVal Accs: {}\nTest Acc: {}\n\n\n".format(epochs,batch_size,validation_size,learning_rate,regularization,np.max(model.accs),model.accs,test_acc))
+    
+    #for i in range(len(model.layers[0].w.T)):
+    #            plt.imshow(model.layers[0].w.T[i].reshape(28,28), cmap='hot', interpolation='nearest')
+    #            plt.show()
+    #            print(i)
+    return
 
-logger.info("\nTraining model...")
-epochs = 1
-batch_size = 10
-validation_size = .1
-learning_rate = 2e-3
-regularization = 2e-3
-model.train(xl,yl, epochs = epochs, batch_size = batch_size, validation_size = validation_size, learning_rate = learning_rate, regularization = regularization) #BEST 5e-4
-
-test_acc = model.evaluate(model.predict(xt),yt)
-print(test_acc)
-
-
-logger.warning("\nTraining complete!\n\nHyperparameters:\nEpochs: {}\nBatch_size: {}\nValidation_size: {}\nlearning_rate: {}\nregularization: {}\n\nStatistics:\nBest Acc Val: {}\nVal Accs: {}\nTest Acc: {}\n\n\n".format(epochs,batch_size,validation_size,learning_rate,regularization,np.max(model.accs),model.accs,test_acc))
-
-
-
-#for i in range(len(model.layers[0].w.T)):
-#            plt.imshow(model.layers[0].w.T[i].reshape(28,28), cmap='hot', interpolation='nearest')
-#            plt.show()
-#            print(i)
-
+if __name__ == "__main__":
+    main()

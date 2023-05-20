@@ -5,12 +5,13 @@ from optimizers import *
 import scipy.signal
 import matplotlib.pyplot as plt
 class Dense():
-    def __init__(self, in_size, out_size):
+    def __init__(self, in_size, out_size, optimizer = Momentum):
         self.in_size = in_size
         self.out_size = out_size
         self.b = np.zeros((1,out_size))
         self.w = np.random.randn(in_size, out_size)/np.sqrt(in_size)
         self.config = {}
+        self.optimizer = optimizer
 
     def compile(self,lr, reg):
         self.config = {'learning_rate': lr,
@@ -41,7 +42,7 @@ class Dense():
         dx = np.dot(dz, self.w.T)
 
         #Apply Optimizer:
-        w, b, self.config = Adam(self.b,self.w,db,dw,self.config)
+        w, b, self.config = self.optimizer(self.b,self.w,db,dw,self.config)
 
 
         self.w = w 
@@ -204,7 +205,7 @@ class BatchNorm():
     
 
 class Conv():
-    def __init__(self, input_shape, kernel_size, num_kernels, padding = 0, stride = 0):
+    def __init__(self, input_shape, kernel_size, num_kernels, padding = 0, stride = 0, optimizer = Momentum):
         self.C, self.H, self.W = input_shape
         self.input_shape = input_shape
         self.F = num_kernels
@@ -215,6 +216,7 @@ class Conv():
         self.config = {}
         self.padding = padding
         self.stride = stride
+        self.optimizer = optimizer
 
     def compile(self,lr, reg):
         self.config = {'learning_rate': lr,
@@ -258,7 +260,7 @@ class Conv():
 
 
         #Apply Optimizer:
-        w, b, self.config = Adam(self.b,self.w,db,dw,self.config)
+        w, b, self.config = self.optimizer(self.b,self.w,db,dw,self.config)
 
         self.w = w
         self.b = b
