@@ -36,11 +36,11 @@ def build_logger(sender, pwd):
 
 def load_data():
     #Load train data:
-    training_data = pd.read_csv('C:/Users/twich/OneDrive/Documentos/NeuralNets/data/mnist_train.csv', header=None,low_memory=False)
+    training_data = pd.read_csv('/Users/eduardoleao/Documents/ML/NN/cnn/data/mnist_train.csv', header=None,low_memory=False)
     yl = training_data.iloc[1:,0].astype('float')
     xl = training_data.iloc[1:,1:].astype('float')
     #Load test data:
-    testing_data = pd.read_csv('C:/Users/twich/OneDrive/Documentos/NeuralNets/data/mnist_test.csv', header=None,low_memory=False)
+    testing_data = pd.read_csv('/Users/eduardoleao/Documents/ML/NN/cnn/data/mnist_test.csv', header=None,low_memory=False)
     yt = testing_data.iloc[1:,0].astype('float')
     xt = testing_data.iloc[1:,1:].astype('float')
 
