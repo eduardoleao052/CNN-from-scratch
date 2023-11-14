@@ -1,0 +1,4 @@
+﻿numpy
+pandas
+scipy
+logging
