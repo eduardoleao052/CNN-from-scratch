@@ -20,4 +20,4 @@ pip install -r requirements.txt
 - Run main.py to train CNN on given dataset. Feel free to alter layers (scaling down is recommended, implemented CNN size took ~40h to converge on my CPU).
 
 ### Results
-- The convolutional neural network implementation in main.py achieved 99.36% accuracy on the validation set of the MNIST handwritten digit dataset.
+- The Convolutional Neural Network implementation in main.py achieved 99.36% accuracy on the validation set of the MNIST handwritten digit dataset.
