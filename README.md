@@ -12,11 +12,12 @@
 conda create -n environment_name python=3.8
 ```
 - The requirements can be installed on a virtual environment with the command
-- ```
+```
 pip install -r requirements.txt
 ```
 - Note: The training is only implemented on CPU (no torch, tensorflow or CUDA support).
-- To run, install the necessary requirements and run main.py to train on MNIST dataset.
+- To run, install the necessary requirements and a image dataset (.csv format).
+- Run main.py to train CNN on given dataset. Feel free to alter layers (scaling down is recommended, implemented CNN size took ~40h to converge on my CPU).
 
 ### Results
 - The convolutional neural network implementation in main.py achieved 99.36% accuracy on the validation set of the MNIST handwritten digit dataset.
