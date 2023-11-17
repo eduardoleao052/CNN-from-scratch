@@ -1,9 +1,8 @@
 import numpy as np
 import pandas as pd
 from optimizers import *
-#from functions import *
 import scipy.signal
-import matplotlib.pyplot as plt
+
 class Dense():
     def __init__(self, in_size, out_size, optimizer = Momentum):
         self.in_size = in_size
@@ -50,10 +49,13 @@ class Dense():
 
         return dx
 
+
 class Relu():
     def __init__(self):
         self.config = {}
-        pass
+        self.w = np.ndarray([])
+        self.b = np.ndarray([])
+
     def compile(self,lr, reg):
         pass
     def forward(self,z, training = False):
@@ -75,7 +77,8 @@ class Relu():
 class Softmax():
     def __init__(self):
         self.config = {}
-        pass
+        self.w = np.ndarray([])
+        self.b = np.ndarray([])
 
     def compile(self,lr, reg):
         pass
@@ -100,10 +103,13 @@ class Softmax():
         #print(dz)
         return dz
 
+
 class Dropout():
     def __init__(self, p=0.8):
         self.config = {}
         self.p = p
+        self.w = np.ndarray([])
+        self.b = np.ndarray([])
         
     def compile(self,lr, reg):
         pass
@@ -126,11 +132,14 @@ class BatchNorm():
         self.gamma = gamma
         self.beta = beta
         self.spatial = False
+        self.w = 0
+        self.b = 0
 
     def compile(self,lr, reg):
         self.config['learning_rate'] = lr
-        self.config['running_mean'] = 0
-        self.config['running_var'] = 0
+        self.config['running_mean'] = self.w
+        self.config['running_var'] = self.b
+        
         
     def forward(self,z,training = True):
         #If input is spatial, flatten so that batchnorm occurs for every "C" channel.
@@ -159,6 +168,11 @@ class BatchNorm():
             #Update running mean and variance:
             self.config['running_mean'] = 0.99 * self.config['running_mean'] + (1 - 0.99) * self.mean
             self.config['running_var'] = 0.99 * self.config['running_var'] + (1 - 0.99) * self.var
+            # print('ayo')
+            # print(self.config['running_var'].shape)
+            # print(self.config['running_mean'].shape)
+            self.w = self.config['running_mean']
+            self.b = self.config['running_var']
 
         elif training == False:
             #On test, apply average normaliz
@@ -268,12 +282,14 @@ class Conv():
         return dx
     
 
-
 class Flatten():
-    def __init__(self, in_shape, out_shape):
+    def __init__(self, in_shape):
+        C, H, W = in_shape
         self.in_shape = in_shape
-        self.out_shape = out_shape
+        self.out_shape = C * H * W
         self.config = {}
+        self.w = np.ndarray([])
+        self.b = np.ndarray([])
 
     def compile(self,lr, reg):
         pass
@@ -295,6 +311,8 @@ class MaxPool():
         self.stride = stride
         self.pool = pool_size
         self.config = {}
+        self.w = np.ndarray([])
+        self.b = np.ndarray([])
 
     def compile(self,lr, reg):
         pass
