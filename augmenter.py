@@ -32,6 +32,8 @@ class Augmenter():
         return df_x, df_y
     
     def fit_transform(self, data, data_y, dimensions = None, ratio = 4):
+        if ratio == 1:
+            return data, data_y
         data = np.array(data)
         data_y = np.array(data_y)
         if dimensions == None:
