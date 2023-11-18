@@ -41,8 +41,8 @@ python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_
 
 ### Testing
 - To test a CNN on your image dataset, go into run.sh and set the flag to --test and choose the following arguments:
-  --test_data (full path to your test data file) 
-  --from_path (path to file with model parameters to be loaded)
+  - --test_data (full path to your test data file) 
+  - --from_path (path to file with model parameters to be loaded)
 ```
 python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_with_model.json
 ```
