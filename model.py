@@ -1,5 +1,6 @@
 ﻿import numpy as np
 import json
+import matplotlib.pyplot as plt
 
 class Model():
     def __init__(self, logger,args):
@@ -60,7 +61,7 @@ class Model():
         print("(TEST) - Validation accuracy:{}".format(acc))
         return
 
-    def train(self, x, y, epochs=30, batch_size = 15, validation_size = .1, learning_rate = 9e-4, regularization = 1e-3, learning_rate_decay = .4, patience = 4):
+    def train(self, x, y, epochs=30, batch_size = 15, validation_size = .1, learning_rate = 9e-4, regularization = 1e-3, learning_rate_decay = 0.05, patience = 4):
         n = len(x)
         for layer in self.layers:
             layer.compile(learning_rate,regularization)
@@ -72,8 +73,8 @@ class Model():
         y = y[int(validation_size*n//1):]
         n = len(x)
 
-        print(f"Number of training instances: {x.shape[0]}")
-        print(f"Number of validation instances: {x_v.shape[0]}")
+        print(f"Number of training instances: {y.shape[0]}")
+        print(f"Number of validation instances: {y_v.shape[0]}")
 
         #One-hot encode "y":
         new_y = np.zeros((len(y),10))
@@ -113,26 +114,23 @@ class Model():
                 #Evaluate Validation:
                 acc = self.evaluate(self.predict(x_v), y_v)
                 self.accs.append(acc)
-                print("Epoch ({}) - Val accuracy:{} - Train accuracy:{}".format(epoch,acc,acc_train))
+                print(f"Epoch ({epoch}/{epochs}) - Val accuracy:{acc} - Train accuracy:{acc_train}")
+                self.logger.info(f"Epoch ({epoch}/{epochs}) - Val accuracy:{acc} - Train accuracy:{acc_train}")
                 #Save best model:
                 if np.argmax(self.accs) == epoch:
                     print("New best model")
                     self.save(self.args.to_path)
-
-                    
                 #Apply Learning Rate Decay:
-                decay_counter += 1
-                if epoch - np.argmax(self.accs) >= patience and decay_counter > patience:
+                elif decay_counter > patience:
                     decay_counter = 0
-                    print(learning_rate)
-                    learning_rate *= (1 - learning_rate_decay + 1e-2)
-                    print(learning_rate)
+                    learning_rate *= (1 - learning_rate_decay)
                     for layer in self.layers:
-                        layer.config['learning_rate'] = learning_rate
-                    print("BROKE")
+                        layer.config['learning_rate'] *= (1 - learning_rate_decay)
+                    print(f"BROKE - lr: [{learning_rate/(1-learning_rate_decay)}] -> [{learning_rate}]")
+                decay_counter += 1
                 
                 #for i in range(5):
-                #    plt.imshow(model.layers[0].w[i][0], cmap='hot', interpolation='nearest')
+                #    plt.imshow(self.layers[0].w[i][0], cmap='hot', interpolation='nearest')
                 #    plt.show()
             # except:
             #     self.logger.exception("\nAn exception has occured on epoch {}:".format(epoch))

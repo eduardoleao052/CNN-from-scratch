@@ -69,8 +69,8 @@ def load_data(args):
     if args.train:
         #Load train data:
         training_data = pd.read_csv(f'{args.train_data}', header=None,low_memory=False)
-        yl = training_data.iloc[1:10000,0].astype('float')
-        xl = training_data.iloc[1:10000,1:].astype('float')
+        yl = training_data.iloc[1:10010,0].astype('float')
+        xl = training_data.iloc[1:10010,1:].astype('float')
 
         #Data Augmentation (shift horizontal & vertical):
         augmenter = Augmenter()
@@ -94,12 +94,13 @@ def load_data(args):
 
     #Normalization:
     xt = (xt - xt.mean()) / (xt.std() + 1e-5)
+    
 
     return xl, xt, yl, yt
 
 def train(model):
     #Training Params:
-    validation_size = .1
+    validation_size = 0.1
     learning_rate = 1e-3
     regularization = 1e-3
     logger.info("\nTraining model...")
@@ -109,11 +110,6 @@ def train(model):
     print(test_acc)
 
     logger.warning("\nTraining complete!\n\nHyperparameters:\nEpochs: {}\nBatch_size: {}\nValidation_size: {}\nlearning_rate: {}\nregularization: {}\n\nStatistics:\nBest Acc Val: {}\nVal Accs: {}\nTest Acc: {}\n\n\n".format(args.epochs,args.batch_size,validation_size,learning_rate,regularization,np.max(model.accs),model.accs,test_acc))
-    
-    #for i in range(len(model.layers[0].w.T)):
-    #            plt.imshow(model.layers[0].w.T[i].reshape(28,28), cmap='hot', interpolation='nearest')
-    #            plt.show()
-    #            print(i)
     return
 
 def test(model):
@@ -137,29 +133,29 @@ xl, xt, yl, yt = load_data(args)
 #Build Model:
 logger.info("\nBuilding model...")
 model = Model(logger, args)
-model.add(Conv(input_shape = (1,28,28), num_kernels = 3, kernel_size = 5,padding=2))
+model.add(Conv(input_shape = (1,28,28), num_kernels = 5, kernel_size = 5,padding=2))
 model.add(BatchNorm())
 model.add(Relu())
-model.add(MaxPool((3,28,28)))
+model.add(MaxPool((5,28,28)))
 
-model.add(Conv(input_shape = (3,14,14), num_kernels = 3, kernel_size = 3, padding=1))
+model.add(Conv(input_shape = (5,14,14), num_kernels = 5, kernel_size = 3, padding=1))
 model.add(BatchNorm())
 model.add(Relu())
-model.add(MaxPool((3,14,14)))
+model.add(MaxPool((5,14,14)))
 
-model.add(Flatten((3,7,7)))
+model.add(Flatten((5,7,7)))
 
-model.add(Dense(147,128,optimizer=Adam))
-model.add(BatchNorm())
-model.add(Relu())
-#model.add(Dropout(p=.8))
-
-model.add(Dense(128,128,optimizer=Adam))
+model.add(Dense(245,256,optimizer=Adam))
 model.add(BatchNorm())
 model.add(Relu())
 #model.add(Dropout(p=.8))
 
-model.add(Dense(128,10,optimizer=Adam))
+model.add(Dense(256,256,optimizer=Adam))
+model.add(BatchNorm())
+model.add(Relu())
+#model.add(Dropout(p=.8))
+
+model.add(Dense(256,10,optimizer=Adam))
 model.add(Softmax())
 
 #Train or test:
