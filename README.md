@@ -1,5 +1,4 @@
-# CNN From Scratch
-## Full implementation of most used Computer Vision layers in plain code (numpy)
+# CNN From Scratch in Vanilla Python
 - This idea started as a personal project after reading <i>Neural Networks and Deep Learning</i> by Michael Nielsen.
 - The OOP-based approach was built after watching CS231n on youtube, and that is the current implementation.
 
