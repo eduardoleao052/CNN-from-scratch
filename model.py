@@ -1,6 +1,5 @@
 ﻿import numpy as np
 import json
-import matplotlib.pyplot as plt
 
 class Model():
     def __init__(self, logger,args):
