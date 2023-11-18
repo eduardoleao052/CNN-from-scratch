@@ -107,6 +107,8 @@ def train(model):
     model.train(xl,yl, epochs = args.epochs, batch_size = args.batch_size, validation_size = validation_size, learning_rate = learning_rate, regularization = regularization) #BEST 5e-4
 
     model.load(args.to_path)
+    for layer in model.layers:
+            layer.compile(0,0)
     test_acc = model.evaluate(model.predict(xt),yt)
     print(f"Test accuracy:{test_acc}")
 
