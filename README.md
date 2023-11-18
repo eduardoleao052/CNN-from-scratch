@@ -61,4 +61,6 @@ python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_wit
 - With the implementation present in run.py, I achieved <b>96,1%</b> in ~1h of training (M2 CPU) on the MNIST dataset.
 ![small_accuracy](https://github.com/eduardoleao052/CNN_From_Scratch/blob/master/assets/model_accuracy_small.png?raw=true)
 - Thank you for reading!
-<img src="assets/model_accuracy_large.png" width="128"/>
+<p align="center">
+  <img src="assets/model_accuracy_large.png" width="128"/>
+</p>
