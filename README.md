@@ -32,12 +32,12 @@ pip install -r requirements.txt
   
 ### Training
 - To train a CNN on your image dataset, go into run.sh and set the flag to --train and choose the following arguments:
-  - --train_data (full path to your training data file, default path to mnist)
-  - --test_data (full path to your test data file) 
-  - --epochs (number of full passes through training data @ traintime) <b>[OPTIONAL, default=30]</b>
-  - --batch_size (size of the batch (number of images per batch)) <b>[OPTIONAL, default=15]</b>
-  - --augmenter_ratio (1 or 4, 1:ratio is how many times training dataset will be augmented) <b>[OPTIONAL, default=1]</b>
-  - --to_path (path to .json file where model parameters will be stored for later use) <b>[OPTIONAL]</b>
+  - `--train_data` (full path to your training data file, default path to mnist)
+  - `--test_data` (full path to your test data file) 
+  - `--epochs` (number of full passes through training data @ traintime) <b>[OPTIONAL, default=30]</b>
+  - `--batch_size` (size of the batch (number of images per batch)) <b>[OPTIONAL, default=15]</b>
+  - `--augmenter_ratio` (1 or 4, 1:ratio is how many times training dataset will be augmented) <b>[OPTIONAL, default=1]</b>
+  - `--to_path` (path to .json file where model parameters will be stored for later use) <b>[OPTIONAL]</b>
 ```
 python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_data --to_path=name_of_json_that_will_store_model.json
 ```
@@ -50,8 +50,8 @@ python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_
 
 ### Testing
 - To test a CNN on your image dataset, go into run.sh and set the flag to --test and choose the following arguments:
-  - --test_data (full path to your test data file) 
-  - --from_path (path to file with model parameters to be loaded)
+  - `--test_data` (full path to your test data file) 
+  - `--from_path` (path to file with model parameters to be loaded)
 ```
 python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_with_model.json
 ```
