@@ -38,11 +38,11 @@ pip install -r requirements.txt
   
 ### Training
 - To train a CNN on your image dataset, go into run.sh and set the flag to --train and choose the following arguments:
-  - `--train_data` (full path to your training data file)                                      <b>[OPTIONAL, default is path to MNIST]</b>
-  - `--test_data` (full path to your test data file)                                           <b>[OPTIONAL, default is path to MNIST]</b>
-  - `--epochs` (number of full passes through training data @ traintime)                       <b>[OPTIONAL, default=30]</b>
-  - `--batch_size` (size of the batch (number of images per batch))                            <b>[OPTIONAL, default=15]</b>
-  - `--augmenter_ratio` (1 or 4, 1:ratio is how many times training dataset will be augmented) <b>[OPTIONAL, default=1]</b>
+  - `--train_data` (full path to your training data file)                                      <b>[OPTIONAL]</b>
+  - `--test_data` (full path to your test data file)                                           <b>[OPTIONAL]</b>
+  - `--epochs` (number of full passes through training data @ traintime)                       <b>[OPTIONAL]</b>
+  - `--batch_size` (size of the batch (number of images per batch))                            <b>[OPTIONAL]</b>
+  - `--augmenter_ratio` (1 or 4, 1:ratio is how many times training dataset will be augmented) <b>[OPTIONAL]</b>
   - `--to_path` (path to .json file where model parameters will be stored for later use)       <b>[OPTIONAL]</b>
 ```
 python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_data --to_path=name_of_json_that_will_store_model.json
