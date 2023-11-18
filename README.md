@@ -1,4 +1,5 @@
 # CNN From Scratch in Vanilla Python
+- Use this repo to train and test your own CNN. Feel free to browse the classes in `layers.py`. They contain full and clear implementations of every layer in a CNN.
 - This idea started as a personal project after reading <i>Neural Networks and Deep Learning</i> by Michael Nielsen.
 - The OOP-based approach was built after watching CS231n on youtube, and that is the current implementation.
 
@@ -18,8 +19,6 @@
   
 - `utils.py` : File with helper functions and classes.
 
-
-- `kerasCIFAR.py` : implement the same model implemented from scratch using Keras. This is usefull to train using GPU computation
 ## 2. Running it Yourself
 ### Requirements
 - The only packaged used for the model is numpy. Other libraries are listed on requirements.txt.
