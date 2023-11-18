@@ -1,12 +1,9 @@
-# CV_Models
+# CNN From Scratch
 ## Full implementation of most used Computer Vision layers in plain code (numpy)
-
-## 1. Inspiration
-
 - This idea started as a personal project after reading <i>Neural Networks and Deep Learning</i> by Michael Nielsen.
 - The OOP-based approach was built after watching CS231n on youtube, and that is the current implementation.
 
-## 2. Project Structure
+## 1. Project Structure
 
 - `main.py` : main file. Set hyper parameters, load dataset, build, train and evaluate CNN model
 
@@ -17,7 +14,7 @@
 - `inout.py` : import dataset, pre process dataset and plot diagnostic curves and weight distribution histograms
 
 - `kerasCIFAR.py` : implement the same model implemented from scratch using Keras. This is usefull to train using GPU computation
-## 3. Running it Yourself
+## 2. Running it Yourself
 ### Requirements
 - The only packaged used for the model is numpy. Other libraries are listed on requirements.txt.
 - Note: scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the functions.py file. The scipy implementation is only being used due to efficiency gains in training.
@@ -64,7 +61,7 @@ python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_wit
 ./run.sh
 ```
 - Note: the accuracy score for these tests will usually be lower than the accuracy scores achieved with the training and validation sets.
-## 4. Results
+## 3. Results
 - The full Convolutional Neural Network implementation achieved <b>99.36%</b> accuracy on the validation set of the MNIST handwritten digit dataset.
 - This implementation is NOT the one presented in the run.py file.
 - The 99.36% implementation used 5 kernels, and 256-dimensioned Dense layers.
