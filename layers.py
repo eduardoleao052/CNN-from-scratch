@@ -57,7 +57,8 @@ class Relu():
         self.b = np.ndarray([])
 
     def compile(self,lr, reg):
-        pass
+        self.config = {'learning_rate': lr}
+
     def forward(self,z, training = False):
         self.z = z
         a = np.maximum(z,-0.01*z)
@@ -81,7 +82,7 @@ class Softmax():
         self.b = np.ndarray([])
 
     def compile(self,lr, reg):
-        pass
+        self.config = {'learning_rate': lr}
 
     def forward(self, z, training = False):
         n = z.shape[0]
@@ -112,7 +113,8 @@ class Dropout():
         self.b = np.ndarray([])
         
     def compile(self,lr, reg):
-        pass
+        self.config = {'learning_rate': lr}
+        
     def forward(self,z,training = True):
         if training == True:
             self.z = z
@@ -292,7 +294,7 @@ class Flatten():
         self.b = np.ndarray([])
 
     def compile(self,lr, reg):
-        pass
+        self.config = {'learning_rate': lr}
 
     def forward(self,x, training = False):
         x_flat = x.reshape((x.shape[0], self.out_shape))
@@ -315,7 +317,7 @@ class MaxPool():
         self.b = np.ndarray([])
 
     def compile(self,lr, reg):
-        pass
+        self.config = {'learning_rate': lr}
 
     def forward(self,x, training = False):
         self.x = x
