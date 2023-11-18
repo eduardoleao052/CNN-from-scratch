@@ -36,7 +36,7 @@ python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_
 ```
 ./run.sh
 ```
-- Whenever you feel like the validation accuracy (%) is good enough, you can kill the training at any time. This will NOT corrupt the model saved .json file, and you may proceed to testing and using the model :).
+- Whenever you feel like the validation accuracy printed is good enough, you can kill the training at any time. This will NOT corrupt the model saved in the given .json file, and you may proceed to testing and using the model :).
 - Note: if you want to alter layers/dimensions, do so in the run.py file, with the .add(Layer) method.
 
 ### Testing
