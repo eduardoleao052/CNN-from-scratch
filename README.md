@@ -53,7 +53,7 @@ python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_wit
 - Note: the accuracy score for these tests will usually be lower than the accuracy scores achieved with the training and validation sets.
 
 ### Results
-- The Convolutional Neural Network implementation in main.py achieved 99.36% accuracy on the validation set of the MNIST handwritten digit dataset.
+- The full Convolutional Neural Network implementation achieved 99.36% accuracy on the validation set of the MNIST handwritten digit dataset.
 - This implementation is NOT the one presented in the run.py file.
 - The 99.36% implementation used 5 kernels, and 256-dimensioned Dense layers.
 - The training time was ~40h on my M2 CPU.
