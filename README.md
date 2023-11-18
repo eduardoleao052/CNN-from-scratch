@@ -38,8 +38,8 @@ pip install -r requirements.txt
   
 ### Training
 - To train a CNN on your image dataset, go into run.sh and set the flag to --train and choose the following arguments:
-  - `--train_data` (full path to your training data file, default path to mnist)
-  - `--test_data` (full path to your test data file) 
+  - `--train_data` (full path to your training data file) <b>[OPTIONAL, default is path to MNIST]</b>
+  - `--test_data` (full path to your test data file) <b>[OPTIONAL, default is path to MNIST]</b>
   - `--epochs` (number of full passes through training data @ traintime) <b>[OPTIONAL, default=30]</b>
   - `--batch_size` (size of the batch (number of images per batch)) <b>[OPTIONAL, default=15]</b>
   - `--augmenter_ratio` (1 or 4, 1:ratio is how many times training dataset will be augmented) <b>[OPTIONAL, default=1]</b>
