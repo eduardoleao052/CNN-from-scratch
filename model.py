@@ -58,7 +58,7 @@ class Model():
     
     def test(self, xt, yt):
         acc = self.evaluate(self.predict(xt), yt)
-        print("(TEST) - Validation accuracy:{}".format(acc))
+        print("Test accuracy:{}".format(acc))
         return
 
     def train(self, x, y, epochs=30, batch_size = 15, validation_size = .1, learning_rate = 9e-4, regularization = 1e-3, learning_rate_decay = 0.05, patience = 4):
