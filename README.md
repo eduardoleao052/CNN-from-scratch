@@ -4,13 +4,20 @@
 
 ## 1. Project Structure
 
-- `main.py` : main file. Set hyper parameters, load dataset, build, train and evaluate CNN model
+- `data/` : Folder to store training and testing datasets. Currently holds MNIST dataset, which is the default.
 
-- `model.py` : network class file. Implement the Convolutional Neural Network
+- `models/` : Folder which stores the saved models. Further explaination in section 2.
 
-- `layer.py` : layer class file. Implement each layer of the Convolutional Neural Network
+- `layers.py` : File containing every layer of the CNN. Each layer is a class with a `.forward` and `.backward` method.
 
-- `inout.py` : import dataset, pre process dataset and plot diagnostic curves and weight distribution histograms
+- `model.py` : File with the `Model` class.
+  
+- `run.py` : Script ran by the `./run.sh` command. Trains the model.
+  
+- `run.sh` : Bash script to be executed by the user.
+  
+- `utils.py` : File with helper functions and classes.
+
 
 - `kerasCIFAR.py` : implement the same model implemented from scratch using Keras. This is usefull to train using GPU computation
 ## 2. Running it Yourself
