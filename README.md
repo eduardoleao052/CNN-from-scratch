@@ -57,10 +57,12 @@ python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_wit
 - This implementation is NOT the one presented in the run.py file.
 - The 99.36% implementation used 5 kernels, and 256-dimensioned Dense layers.
 - The training time was ~20h on my M2 CPU.
+  
 <p align="center">
   <img src="assets/model_accuracy_large.png" width="900"/>
 </p>
 - With the implementation present in run.py, I achieved <b>96,1%</b> in ~1h of training (M2 CPU) on the MNIST dataset.
+
 <p align="center">
   <img src="assets/model_accuracy_small.png" width="900"/>
 </p>
