@@ -23,9 +23,10 @@
 ### Requirements
 - The only packaged used for the model is numpy. Other libraries are listed on `requirements.txt`.
 - Note: scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the `functions.py` file. The scipy implementation is only being used due to efficiency gains in training.
-- To setup a miniconda virtual environment, run on terminal:
+- To setup and join a miniconda virtual environment, run on terminal:
 ```
 conda create -n environment_name python=3.8
+conda activate environment_name
 ```
 - The requirements can be installed on a virtual environment with the command
 ```
