@@ -21,8 +21,8 @@
 
 ## 2. Running it Yourself
 ### Requirements
-- The only packaged used for the model is numpy. Other libraries are listed on requirements.txt.
-- Note: scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the functions.py file. The scipy implementation is only being used due to efficiency gains in training.
+- The only packaged used for the model is numpy. Other libraries are listed on `requirements.txt`.
+- Note: scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the `functions.py` file. The scipy implementation is only being used due to efficiency gains in training.
 - To setup a miniconda virtual environment, run on terminal:
 ```
 conda create -n environment_name python=3.8
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 - You can download your image file in the data directory.
   
 ### Training
-- To train a CNN on your image dataset, go into run.sh and set the flag to --train and choose the following arguments:
+- To train a CNN on your image dataset, go into run.sh and set the flag to `--train` and choose the following arguments:
   - `--train_data` (full path to your training data file)                                      <b>[OPTIONAL]</b>
   - `--test_data` (full path to your test data file)                                           <b>[OPTIONAL]</b>
   - `--epochs` (number of full passes through training data @ traintime)                       <b>[OPTIONAL]</b>
@@ -55,7 +55,7 @@ python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_
 - Note: if you want to alter layers/dimensions, do so in the run.py file, with the .add(Layer) method.
 
 ### Testing
-- To test a CNN on your image dataset, go into run.sh and set the flag to --test and choose the following arguments:
+- To test a CNN on your image dataset, go into run.sh and set the flag to `--test` and choose the following arguments:
   - `--test_data` (full path to your test data file) 
   - `--from_path` (path to file with model parameters to be loaded)
 ```
