@@ -53,7 +53,7 @@ python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_
 ./run.sh
 ```
 - Whenever you feel like the validation accuracy printed is good enough, you can kill the training at any time. This will NOT corrupt the model saved in the given .json file, and you may proceed to testing and using the model :).
-- Note: if you want to alter layers/dimensions, do so in the run.py file, with the .add(Layer) method.
+- Note: if you want to alter layers/dimensions, do so in the `run.py` file, with the `.add(Layer)` method.
 
 ### Testing
 - To test a CNN on your image dataset, go into run.sh and set the flag to `--test` and choose the following arguments:
@@ -69,7 +69,7 @@ python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_wit
 - Note: the accuracy score for these tests will usually be lower than the accuracy scores achieved with the training and validation sets.
 ## 3. Results
 - The full Convolutional Neural Network implementation achieved <b>99.36%</b> accuracy on the validation set of the MNIST handwritten digit dataset.
-- This implementation is NOT the one presented in the run.py file.
+- This implementation is NOT the one presented in the `run.py` file.
 - The <b>99.36%</b> implementation used 5 kernels, and 256-dimensioned Dense layers.
 - The training time was ~25h on my M2 CPU.
   
