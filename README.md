@@ -76,7 +76,7 @@ python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_wit
 <p align="left", style="margin-left:35px;">
   <img src="assets/model_accuracy_large.png" width="900"/>
 </p>
-- With the implementation present in run.py, I achieved <b>96,1%</b> in ~15min of training (M2 CPU) on the MNIST dataset.
+- With the implementation present in `run.py`, I achieved <b>96,1%</b> in ~15min of training (M2 CPU) on the MNIST dataset.
 
 <p align="left", style="margin-left:35px;">
   <img src="assets/model_accuracy_small.png" width="900"/>
