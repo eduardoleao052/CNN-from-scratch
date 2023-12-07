@@ -3,6 +3,75 @@ import pandas as pd
 from utils import *
 import scipy.signal
 
+
+
+class Conv():
+    def __init__(self, input_shape, kernel_size, num_kernels, padding = 0, stride = 0, optimizer = Momentum):
+        ''' Initialize Layer components and attributes. '''
+        self.C, self.H, self.W = input_shape
+        self.input_shape = input_shape
+        self.F = num_kernels
+        self.output_shape = (num_kernels, self.H - kernel_size + 1 + 2 * padding, self.W - kernel_size + 1 + 2 * padding)
+        self.kernel_shape = (num_kernels, self.C, kernel_size, kernel_size)
+        self.w = np.random.randn(*self.kernel_shape) / np.sqrt(np.prod(self.input_shape))
+        self.b = np.random.randn(*self.output_shape)
+        self.config = {}
+        self.padding = padding
+        self.stride = stride
+        self.optimizer = optimizer
+
+    def compile(self,lr, reg):
+        ''' Instatiate self.config, containing hyperparameters and cumulative momentum and velocity for Adam. '''
+        self.config = {'learning_rate': lr,
+                       'regularization': reg,
+                       'beta1': .9,
+                       'beta2':.99,
+                       'epsilon':1e-8,
+                       'm_b':np.zeros(self.b.shape),
+                       'v_b':np.zeros(self.b.shape),
+                       'm_w':np.zeros(self.w.shape),
+                       'v_w':np.zeros(self.w.shape),
+                       't':30}
+        
+    def forward(self,z, training = False):
+        self.z = z.reshape(z.shape[0],*self.input_shape) #self.z = z.reshape(self.input_shape) 
+        self.pad_z = np.zeros((z.shape[0],self.C, self.H + 2 *self.padding, self.W + 2 *self.padding))
+        a = np.zeros((z.shape[0],*self.output_shape)) #a = np.zeros((self.output_shape)) #
+        for n in range(z.shape[0]):
+            a[n] += self.b    #a += self.b OLHAR ISSO
+            for i in range(self.F):
+                for j in range(self.C):
+                    self.pad_z[n,j] = np.pad(self.z[n,j], pad_width = self.padding)
+                    a[n,i] += scipy.signal.correlate2d(self.pad_z[n,j], self.w[i,j], mode = 'valid') #a[n,i] = z[n,j], w[i,j]
+
+        return a
+
+    def backward(self, dz, y):
+        z = self.z
+        dw = np.zeros(self.kernel_shape)
+        db = np.sum(dz,axis = 0)
+        dx = np.zeros((z.shape[0],*self.input_shape)) #dx = np.zeros(self.input_shape) 
+
+
+
+        for n in range(z.shape[0]):
+            for i in range(self.F):
+                for j in range(self.C):
+                    dw[i,j] += scipy.signal.correlate2d(self.pad_z[n,j],dz[n,i], mode = 'valid') #[i,j] = [n,j], [n,i]
+                    #p = int((dx.shape[-1] + self.w.shape[-1] - dz.shape[-1] - 1) / 2) # Ho = H - HH + 1 + 2p  ==== OR ==== p = self.kernel_shape[-1]-1
+                    dz_padded = np.pad(dz[n,i], pad_width= (self.kernel_shape[2] - 1 - self.padding))
+                    dx[n,j] +=  scipy.signal.convolve2d(dz_padded, self.w[i,j], mode = 'valid') #[n,j] = [n,i], [i,j] #[self.padding : self.H - self.padding,self.padding : self.W - self.padding]
+
+
+        #Apply Optimizer:
+        w, b, self.config = self.optimizer(self.b,self.w,db,dw,self.config)
+
+        self.w = w
+        self.b = b
+
+        return dx
+
+
 class Dense():
     def __init__(self, in_size, out_size, optimizer = Momentum):
         self.in_size = in_size
@@ -216,70 +285,6 @@ class BatchNorm():
 
         if self.spatial == True:
             dx = dx.reshape(N, H, W, C).transpose(0,3,1,2)
-
-        return dx
-    
-
-class Conv():
-    def __init__(self, input_shape, kernel_size, num_kernels, padding = 0, stride = 0, optimizer = Momentum):
-        self.C, self.H, self.W = input_shape
-        self.input_shape = input_shape
-        self.F = num_kernels
-        self.output_shape = (num_kernels, self.H - kernel_size + 1 + 2 * padding, self.W - kernel_size + 1 + 2 * padding)
-        self.kernel_shape = (num_kernels, self.C, kernel_size, kernel_size)
-        self.w = np.random.randn(*self.kernel_shape) / np.sqrt(np.prod(self.input_shape))
-        self.b = np.random.randn(*self.output_shape)
-        self.config = {}
-        self.padding = padding
-        self.stride = stride
-        self.optimizer = optimizer
-
-    def compile(self,lr, reg):
-        self.config = {'learning_rate': lr,
-                       'regularization': reg,
-                       'beta1': .9,
-                       'beta2':.99,
-                       'epsilon':1e-8,
-                       'm_b':np.zeros(self.b.shape),
-                       'v_b':np.zeros(self.b.shape),
-                       'm_w':np.zeros(self.w.shape),
-                       'v_w':np.zeros(self.w.shape),
-                       't':30}
-    def forward(self,z, training = False):
-        self.z = z.reshape(z.shape[0],*self.input_shape) #self.z = z.reshape(self.input_shape) 
-        self.pad_z = np.zeros((z.shape[0],self.C, self.H + 2 *self.padding, self.W + 2 *self.padding))
-        a = np.zeros((z.shape[0],*self.output_shape)) #a = np.zeros((self.output_shape)) #
-        for n in range(z.shape[0]):
-            a[n] += self.b    #a += self.b OLHAR ISSO
-            for i in range(self.F):
-                for j in range(self.C):
-                    self.pad_z[n,j] = np.pad(self.z[n,j], pad_width = self.padding)
-                    a[n,i] += scipy.signal.correlate2d(self.pad_z[n,j], self.w[i,j], mode = 'valid') #a[n,i] = z[n,j], w[i,j]
-
-        return a
-
-    def backward(self, dz, y):
-        z = self.z
-        dw = np.zeros(self.kernel_shape)
-        db = np.sum(dz,axis = 0)
-        dx = np.zeros((z.shape[0],*self.input_shape)) #dx = np.zeros(self.input_shape) 
-
-
-
-        for n in range(z.shape[0]):
-            for i in range(self.F):
-                for j in range(self.C):
-                    dw[i,j] += scipy.signal.correlate2d(self.pad_z[n,j],dz[n,i], mode = 'valid') #[i,j] = [n,j], [n,i]
-                    #p = int((dx.shape[-1] + self.w.shape[-1] - dz.shape[-1] - 1) / 2) # Ho = H - HH + 1 + 2p  ==== OR ==== p = self.kernel_shape[-1]-1
-                    dz_padded = np.pad(dz[n,i], pad_width= (self.kernel_shape[2] - 1 - self.padding))
-                    dx[n,j] +=  scipy.signal.convolve2d(dz_padded, self.w[i,j], mode = 'valid') #[n,j] = [n,i], [i,j] #[self.padding : self.H - self.padding,self.padding : self.W - self.padding]
-
-
-        #Apply Optimizer:
-        w, b, self.config = self.optimizer(self.b,self.w,db,dw,self.config)
-
-        self.w = w
-        self.b = b
 
         return dx
     
