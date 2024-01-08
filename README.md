@@ -1,7 +1,6 @@
 # CNN From Scratch in Vanilla Python
 - Use this repo to __train and test your own CNN__. Feel free to browse the classes in [layers.py](layers.py). They contain a full CNN implementation in __less than 50 lines of code__.
 - This idea started as a personal project after reading <i>Neural Networks and Deep Learning</i> by Michael Nielsen.
-- The OOP-based approach was built after watching CS231n on youtube, and that is the current implementation.
 
 ## 1. Project Structure
 
