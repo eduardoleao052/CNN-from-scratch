@@ -20,24 +20,30 @@
 - `utils.py` : File with helper functions and classes.
 
 ## 2. Running it Yourself
-### Requirements
+<details>
+<summary> <h3>Requirements</h3> </summary>
+
 - The only packaged used for the model is numpy. Other libraries are listed on `requirements.txt`.
-- Note: scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the `functions.py` file. The scipy implementation is only being used due to efficiency gains in training.
 - To setup and join a miniconda virtual environment, run on terminal:
 ```
 conda create -n environment_name python=3.8
 conda activate environment_name
 ```
+> **Note:** Scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the `functions.py` file. The scipy implementation is only being used due to efficiency gains in training.
 - The requirements can be installed on a virtual environment with the command
 ```
 pip install -r requirements.txt
 ```
-- Note: The training is only implemented on CPU (no torch, tensorflow or CUDA support).
 - To run, install the necessary requirements and a image dataset (.csv format).
 - There must be a training and a test files. The files must have the label as the first column, and the features as the remaining columns.
 - You can download your image file in the data directory.
+> **Note:** The training is only implemented on CPU (no torch, tensorflow or CUDA support).
+
+</details>
+
+<details>
+<summary> <h3>Training</h3> </summary>
   
-### Training
 - To train a CNN on your image dataset, go into run.sh and set the flag to `--train` and choose the following arguments:
   - `--train_data` (full path to your training data file)                                      <b>[OPTIONAL]</b>
   - `--test_data` (full path to your test data file)                                           <b>[OPTIONAL]</b>
@@ -53,10 +59,14 @@ python3 run.py --train --train_data=path_to_train_data --test_data=path_to_test_
 ./run.sh
 ```
 - Whenever you feel like the validation accuracy printed is good enough, you can kill the training at any time. This will NOT corrupt the model saved in the given .json file, and you may proceed to testing and using the model :).
-- Note: if you want to alter layers/dimensions, do so in the `run.py` file, with the `.add(Layer)` method.
+> **Note:** If you want to alter layers/dimensions, do so in the `run.py` file, with the `.add(Layer)` method.
 
-### Testing
-- To test a CNN on your image dataset, go into run.sh and set the flag to `--test` and choose the following arguments:
+</details>
+
+<details>
+<summary> <h3>Testing</h3> </summary>
+
+  - To test a CNN on your image dataset, go into run.sh and set the flag to `--test` and choose the following arguments:
   - `--test_data` (full path to your test data file) 
   - `--from_path` (path to file with model parameters to be loaded)
 ```
@@ -66,7 +76,10 @@ python3 run.py --test --test_data=path_to_test_data --from_path=name_of_json_wit
 ```
 ./run.sh
 ```
-- Note: the accuracy score for these tests will usually be lower than the accuracy scores achieved with the training and validation sets.
+> **Note:** The accuracy score for these tests will usually be lower than the accuracy scores achieved with the training and validation sets.
+
+</details>
+
 ## 3. Results
 - The full Convolutional Neural Network implementation achieved <b>99.36%</b> accuracy on the validation set of the MNIST handwritten digit dataset.
 - This implementation is NOT the one presented in the `run.py` file.
