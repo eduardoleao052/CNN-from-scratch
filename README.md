@@ -35,8 +35,7 @@ pip install -r requirements.txt
 - To run, install the necessary requirements and a image dataset (.csv format).
 - There must be a training and a test files. The files must have the label as the first column, and the features as the remaining columns.
 - You can download your image file in the data directory.
-> **Note:** The training is only implemented on CPU (no torch, tensorflow or CUDA support).
-> **Note:** Scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the `functions.py` file. The scipy implementation is only being used due to efficiency gains in training.
+> **Notes:** __1:__ The training is only implemented on CPU (no torch, tensorflow or CUDA support). __2:__ Scipy is used for faster implementation of Correlation and Convolution. I also made fully numpy-based implementations. They work and are in the `functions.py` file. The scipy implementation is only being used due to efficiency gains in training.
 
 </details>
 
