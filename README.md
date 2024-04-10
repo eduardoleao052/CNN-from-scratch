@@ -3,8 +3,6 @@
 
 ## 1. Project Structure
 
-- `data/` : Folder to store training and testing datasets. Currently holds MNIST dataset, which is the default.
-
 - `models/` : Folder which stores the saved models. Further explaination in section 2.
 
 - `layers.py` : File containing every layer of the CNN. Each layer is a class with a `.forward` and `.backward` method.
@@ -12,9 +10,7 @@
 - `model.py` : File with the `Model` class.
   
 - `run.py` : Script ran by the `./run.sh` command. Trains the model.
-  
-- `run.sh` : Bash script to be executed by the user.
-  
+    
 - `utils.py` : File with helper functions and classes.
 
 ## 2. Running it Yourself
